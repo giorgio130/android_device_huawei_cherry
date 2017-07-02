@@ -72,10 +72,6 @@ PRODUCT_COPY_FILES += \
     $(TOPDIR)frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:/system/etc/r_submix_audio_policy_configuration.xml \
     $(TOPDIR)frameworks/av/services/audiopolicy/config/usb_audio_policy_configuration.xml:/system/etc/usb_audio_policy_configuration.xml
 
-# Browser
-PRODUCT_PACKAGES += \
-    Gello
-
 # Camera
 PRODUCT_PACKAGES += \
     camera.msm8909 \
@@ -134,6 +130,18 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/sensors/hals.conf:system/etc/sensors/hals.conf
+
+# USB ID
+ADDITIONAL_DEFAULT_PROPERTIES += \
+    ro.usb.id.midi=90BA \
+    ro.usb.id.midi_adb=90BB \
+    ro.usb.id.mtp=1051 \
+    ro.usb.id.mtp_adb=1052 \
+    ro.usb.id.ptp=1083 \
+    ro.usb.id.ptp_adb=1054 \
+    ro.usb.id.ums=1037 \
+    ro.usb.id.ums_adb=1038 \
+    ro.usb.vid=12d1
 
 # WiFi
 PRODUCT_PACKAGES += \
