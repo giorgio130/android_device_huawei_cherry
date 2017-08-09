@@ -851,7 +851,6 @@ typedef struct {
     cam_focus_distances_info_t focus_dist;       /* focus distance */
     int32_t focus_pos;
     uint32_t focused_frame_idx;
-    cam_focus_mode_type focus_mode;        /* focus mode from backend */
 } cam_auto_focus_data_t;
 
 typedef struct {
@@ -907,6 +906,17 @@ typedef struct {
     int              sensing_method;
     float            crop_factor;
 } cam_sensor_params_t;
+
+typedef enum {
+    CAM_METERING_MODE_UNKNOWN = 0,
+    CAM_METERING_MODE_AVERAGE = 1,
+    CAM_METERING_MODE_CENTER_WEIGHTED_AVERAGE = 2,
+    CAM_METERING_MODE_SPOT = 3,
+    CAM_METERING_MODE_MULTI_SPOT = 4,
+    CAM_METERING_MODE_PATTERN = 5,
+    CAM_METERING_MODE_PARTIAL = 6,
+    CAM_METERING_MODE_OTHER = 255,
+} cam_metering_mode_t;
 
 typedef struct {
     float exp_time;

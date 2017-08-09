@@ -934,12 +934,8 @@ int32_t QCameraReprocessChannel::addReprocStreamsFromSource(
                 if (!param.needThumbnailReprocess(&feature_mask)) {
                     continue;
                 }
-                // CAC, SHARPNESS, FLIP and WNR would have been already applied -
-                // on preview/postview stream in realtime. Need not apply again.
-                feature_mask &= ~(CAM_QCOM_FEATURE_DENOISE2D |
-                        CAM_QCOM_FEATURE_CAC |
-                        CAM_QCOM_FEATURE_SHARPNESS |
-                        CAM_QCOM_FEATURE_FLIP);
+                //Don't do WNR for thumbnail
+                feature_mask &= ~CAM_QCOM_FEATURE_DENOISE2D;
                 if (!feature_mask) {
                     // Skip thumbnail stream reprocessing since no other
                     //reprocessing is enabled.
@@ -1120,7 +1116,7 @@ QCameraStream * QCameraReprocessChannel::getStreamBySrouceHandle(uint32_t srcHan
 /*===========================================================================
  * FUNCTION   : stop
  *
- * DESCRIPTION: Unmap offline buffers and stop channel
+ * DESCRIPTION: stop channel and unmap offline buffers
  *
  * PARAMETERS : none
  *
@@ -1130,6 +1126,8 @@ QCameraStream * QCameraReprocessChannel::getStreamBySrouceHandle(uint32_t srcHan
  *==========================================================================*/
 int32_t QCameraReprocessChannel::stop()
 {
+    int32_t rc = QCameraChannel::stop();
+
     if (!mOfflineBuffers.empty()) {
         QCameraStream *stream = NULL;
         List<OfflineBuffer>::iterator it = mOfflineBuffers.begin();
@@ -1149,7 +1147,7 @@ int32_t QCameraReprocessChannel::stop()
         mOfflineBuffers.clear();
     }
 
-    return QCameraChannel::stop();
+    return rc;
 }
 
 /*===========================================================================

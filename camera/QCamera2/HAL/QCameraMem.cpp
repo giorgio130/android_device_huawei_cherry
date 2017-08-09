@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2016, The Linux Foundataion. All rights reserved.
+/* Copyright (c) 2012-2015, The Linux Foundataion. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -570,16 +570,31 @@ int QCameraMemoryPool::findBufferLocked(
     }
 
     List<struct QCameraMemory::QCameraMemInfo>::iterator it = mPools[streamType].begin();
-    for( ; it != mPools[streamType].end() ; it++) {
-        if( ((*it).size >= size) &&
-            ((*it).heap_id == heap_id) &&
-            ((*it).cached == cached) ) {
-            memInfo = *it;
-            ALOGE("%s : Found buffer %lx size %d",
-                    __func__, (unsigned long)memInfo.handle, memInfo.size);
-            mPools[streamType].erase(it);
-            rc = NO_ERROR;
-            break;
+    if (streamType == CAM_STREAM_TYPE_OFFLINE_PROC) {
+        for( ; it != mPools[streamType].end() ; it++) {
+            if( ((*it).size == size) &&
+                    ((*it).heap_id == heap_id) &&
+                    ((*it).cached == cached) ) {
+                memInfo = *it;
+                ALOGE("%s : Found buffer %lx size %d",
+                        __func__, (unsigned long)memInfo.handle, memInfo.size);
+                mPools[streamType].erase(it);
+                rc = NO_ERROR;
+                break;
+            }
+        }
+    } else {
+        for( ; it != mPools[streamType].end() ; it++) {
+            if(((*it).size >= size) &&
+                    ((*it).heap_id == heap_id) &&
+                    ((*it).cached == cached) ) {
+                memInfo = *it;
+                ALOGE("%s : Found buffer %lx size %d",
+                        __func__, (unsigned long)memInfo.handle, memInfo.size);
+                mPools[streamType].erase(it);
+                rc = NO_ERROR;
+                break;
+            }
         }
     }
 
